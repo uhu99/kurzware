@@ -6,7 +6,9 @@ import (
 	"strconv"
 )
 
-func acker(n, m int32) int32 {
+type anum int32
+
+func acker(n, m anum) anum {
 	if n == 0 {
 		return m + 1
 	} else if m == 0 {
@@ -35,6 +37,6 @@ func arg(i int) (int32, error) {
 		fmt.Fprintln(os.Stderr, "Nix verstehen: ", os.Args[i])
 	}
 
-	return int32(n), e
+	return anum(n), e
 }
 
