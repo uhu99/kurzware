@@ -1,0 +1,15 @@
+#+TITLE: Scheme Interpreter
+#+AUTHOR: Stefan Kurz
+
+* Einleitung
+
+Versuch einen Scheme Interpreter nachzubauen, wie er in 
+
+R. Kent Dybvig: Three Implementation Models for Scheme. Chapell
+Hill, 1987.
+
+beschrieben ist.
+
+* Fingerübungen
+
+
