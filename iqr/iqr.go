@@ -24,12 +24,14 @@ import (
 var (
 	dpi      = flag.Float64("dpi", 180, "screen resolution in Dots Per Inch")
 	fontfile = flag.String("fontfile", "OCRB.ttf", "filename of the ttf font")
-	size     = flag.Float64("size", 8, "font size in points")
+	size     = flag.Float64("size", 10, "font size in points")
 	spacing  = flag.Float64("spacing", 1.5, "line spacing (e.g. 2 means double spaced)")
 	wonb     = flag.Bool("whiteonblack", false, "white text on a black background")
 	text1    = flag.String("t1", "http://kurzware.de/q", "first line")
 	text2    = flag.String("t2", "130342", "second line")
 	textqr   = flag.String("tqr", "http://kurzware.de/q?r=130342", "QR text")
+	height   = flag.Int("height", 128, "height in points")
+	mult     = flag.Int("mult", 4, "pixel size in points")
 )
 
 func main() {
@@ -56,7 +58,9 @@ func main() {
 		fg, bg = image.White, image.Black
 		ruler = color.RGBA{0x22, 0x22, 0x22, 0xff}
 	}
-	rgba := image.NewRGBA(image.Rect(0, 0, 400, 57))
+	//rgba := image.NewRGBA(image.Rect(0, 0, 400, 57))
+	rgba := image.NewRGBA(image.Rect(0, 0, 460, *height))
+	//rgba := image.NewRGBA(image.Rect(0, 0, 400, 128))
 	draw.Draw(rgba, rgba.Bounds(), bg, image.ZP, draw.Src)
 	c := freetype.NewContext()
 	c.SetDPI(*dpi)
@@ -70,13 +74,13 @@ func main() {
 	for i := 0; i < 10; i++ {
 		rgba.Set(0, i, ruler)
 		rgba.Set(i, 0, ruler)
-		rgba.Set(0, 56-i, ruler)
-		rgba.Set(i, 56, ruler)
+		rgba.Set(0, *height - 1 - i, ruler)
+		rgba.Set(i, *height - 1, ruler)
 
-		rgba.Set(399, i, ruler)
-		rgba.Set(399-i, 0, ruler)
-		rgba.Set(399, 56-i, ruler)
-		rgba.Set(399-i, 56, ruler)
+		rgba.Set(459, i, ruler)
+		rgba.Set(459-i, 0, ruler)
+		rgba.Set(459, *height - 1 - i, ruler)
+		rgba.Set(459-i, *height - 1, ruler)
 	}
 
 	// Draw the text.
@@ -93,7 +97,7 @@ func main() {
 	// QR Code einfügen
 //	qrc := get_qr("http://kurzware.de/q?r=130342")
 	qrc,_,_ := image.Decode(strings.NewReader(get_qr(*textqr)))
-	dp := image.Rect(330,0, 400,57)
+	dp := image.Rect(330,0, 460, *height - 1)
 	sp := image.Pt(4,4)
 	draw.Draw(rgba, dp, qrc, sp, draw.Src)
 
@@ -131,7 +135,7 @@ func get_qr(t string) string {
 	fmt.Println(t)
 	fmt.Print("QR Code Size (Pixels) = ")
 	fmt.Println(q.Size)
-	q.Scale = 2
+	q.Scale = *mult
 
 //	return q.Image()
 	return string(q.PNG())

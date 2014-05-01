@@ -17,7 +17,7 @@ do
     url=$qrcode$n
 
     echo ./iqr -t1="$zeile1" -t2="?r=$n" -tqr="$url"
-    ./iqr -t1="$zeile1" -t2="?r=$n" -tqr="$url"
+    ./iqr -size=11 -t1="http://kurzware" -t2=".de/q?r=$n" -tqr="$url"
     pngcrush -q -res 180 out.png qr$n.png
     pngcrush -q -res 180 out.png etiketten.rtfd/e_1_$i.png
     pngcrush -q -res 150 out.png etiketten.rtfd/e_2_$i.png
