@@ -1,3 +1,6 @@
+/* Dies ist ein Test
+*/
+
 package main
 
 import (
