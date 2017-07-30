@@ -3,7 +3,7 @@ import BaseHTTPServer
 
 from megapi import *
 
-HOST_NAME = 'localhost' # !!!REMEMBER TO CHANGE THIS!!!
+HOST_NAME = '0.0.0.0'   # 'localhost' # !!!REMEMBER TO CHANGE THIS!!!
 PORT_NUMBER = 8088 # Maybe set this to 9000.
 
 CONTROL = """
@@ -99,7 +99,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     bot = MegaPi()
-    bot.start('/dev/cu.Makeblock-ELETSPP')
+    bot.start()  #'/dev/cu.Makeblock-ELETSPP')
     bot.motorRun(M1,0);
     bot.motorRun(M2,0);
     server_class = BaseHTTPServer.HTTPServer
