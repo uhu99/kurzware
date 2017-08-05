@@ -120,7 +120,7 @@ class MyView:
         (res, mx, my, ms) = self.flow2measure(flow)
         self.showmeasure(bgr, res, mx, my, ms)
         ret, self.flow12 = cv2.imencode('.png', bgr)
-        ret = cv2.imwrite('flow12.png', self.bgr)
+        ret = cv2.imwrite('flow12.png', bgr)
         ret, self.frame2 = cv2.imencode('.png', self.f2)
         ret = cv2.imwrite('frame2.png', self.f2)
 
@@ -132,7 +132,7 @@ class MyView:
         (res, mx, my, ms) = self.flow2measure(flow)
         self.showmeasure(bgr, res, mx, my, ms)
         ret, self.flow23 = cv2.imencode('.png', bgr)
-        ret = cv2.imwrite('flow23.png', self.bgr)
+        ret = cv2.imwrite('flow23.png', bgr)
         ret, self.frame3 = cv2.imencode('.png', self.f3)
         ret = cv2.imwrite('frame3.png', self.f3)
 
