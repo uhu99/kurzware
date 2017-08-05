@@ -5,15 +5,15 @@ import base64
 import numpy as np
 import cv2
 
-#from megapi import *
+from megapi import *
 
-M1=M2=0
+#M1=M2=0
 
-class MegaPi:
-    def start(self, x=' '):
-        return #nix
-    def motorRun(self,x,y):
-        return #nix
+#class MegaPi:
+#    def start(self, x=' '):
+#        return #nix
+#    def motorRun(self,x,y):
+#        return #nix
 
 
 HOST_NAME = '0.0.0.0'   # 'localhost' # !!!REMEMBER TO CHANGE THIS!!!
@@ -23,6 +23,9 @@ SLOW = 20
 FAST = 70
 
 class MyView:
+    WIDTH=640
+    HEIGHT=480
+    
     ca = 180.0/np.pi/2.0
     font = cv2.FONT_HERSHEY_SIMPLEX
 
@@ -37,8 +40,8 @@ class MyView:
     def __init__(self):
         print("--=== 0 ===--")
         self.cap = cv2.VideoCapture(0)
-        self.cap.set(3,640) #width: 640
-        self.cap.set(4,480) #height: 480
+        self.cap.set(3,self.WIDTH) #width: 640
+        self.cap.set(4,self.HEIGHT) #height: 480
         
         ret, frame = self.cap.read()
         self.f1 = np.zeros_like(frame)
@@ -75,23 +78,28 @@ class MyView:
 
     
     def showmeasure(self, bgr, res, mx, my, ms):
-        y=120
+        w2 = self.WIDTH/2
+        h2 = self.HEIGHT/2
+        w4 = w2/2
+        h4 = h2/2
+        
+        y=h4
         for row in res:
-            x=160
+            x=w4
             for cell in row:
                 cv2.line(bgr,(x,y),(int(x+cell[0]*10),int(y+cell[1]*10)),(255,0,255),5)
-                x+=320
-            y+=240
+                x+=w2
+            y+=h2
         
-        cv2.line(bgr,(320,240),(int(320+mx*10),int(240+my*10)),(255,0,255),5)
+        cv2.line(bgr,(w2,h2),(int(w2+mx*10),int(h2+my*10)),(255,0,255),5)
         t = "{}".format(abs(mx))
-        cv2.putText(bgr,t,(10,300), self.font, 1,(255,255,255),2,cv2.LINE_AA)
+        cv2.putText(bgr,t,(10,25), self.font, 1,(255,255,255),2,cv2.LINE_AA)
         t = "{}".format(abs(my))
-        cv2.putText(bgr,t,(10,325), self.font, 1,(255,255,255),2,cv2.LINE_AA)
+        cv2.putText(bgr,t,(10,50), self.font, 1,(255,255,255),2,cv2.LINE_AA)
             
-        cv2.line(bgr,(400,240),(400,int(240+ms*10)),(255,0,255),5)
+        cv2.line(bgr,((w2+w4)/2,h2),((w2+w4)/2,int(h2+ms*10)),(255,0,255),5)
         t = "{}".format(abs(ms))
-        cv2.putText(bgr,t,(10,350), self.font, 1,(255,255,255),2,cv2.LINE_AA)
+        cv2.putText(bgr,t,(10,75), self.font, 1,(255,255,255),2,cv2.LINE_AA)
     
     
     def takePictures(self):
