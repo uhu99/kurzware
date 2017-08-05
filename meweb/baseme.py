@@ -23,8 +23,8 @@ SLOW = 20
 FAST = 70
 
 class MyView:
-    WIDTH=640
-    HEIGHT=480
+    WIDTH=160 #640
+    HEIGHT=120 #480
     
     ca = 180.0/np.pi/2.0
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -112,6 +112,7 @@ class MyView:
     def measurePictures(self):
         prvs = cv2.cvtColor(self.f1,cv2.COLOR_BGR2GRAY)
         ret, self.frame1 = cv2.imencode('.png', self.f1)
+        ret = cv2.imwrite('frame1.png', self.f1)
 
         next = cv2.cvtColor(self.f2,cv2.COLOR_BGR2GRAY)
         flow = cv2.calcOpticalFlowFarneback(prvs,next, None, 0.5, 3, 15, 3, 5, 1.2, 0)
@@ -119,7 +120,9 @@ class MyView:
         (res, mx, my, ms) = self.flow2measure(flow)
         self.showmeasure(bgr, res, mx, my, ms)
         ret, self.flow12 = cv2.imencode('.png', bgr)
+        ret = cv2.imwrite('flow12.png', self.bgr)
         ret, self.frame2 = cv2.imencode('.png', self.f2)
+        ret = cv2.imwrite('frame2.png', self.f2)
 
         prvs = next
 
@@ -129,7 +132,9 @@ class MyView:
         (res, mx, my, ms) = self.flow2measure(flow)
         self.showmeasure(bgr, res, mx, my, ms)
         ret, self.flow23 = cv2.imencode('.png', bgr)
+        ret = cv2.imwrite('flow23.png', self.bgr)
         ret, self.frame3 = cv2.imencode('.png', self.f3)
+        ret = cv2.imwrite('frame3.png', self.f3)
 
 
 def me_control(path):
