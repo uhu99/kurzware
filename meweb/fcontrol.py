@@ -5,15 +5,15 @@ import base64
 import numpy as np
 import cv2
 
-#from megapi import *
+from megapi import *
 
-M1=M2=0
-
-class MegaPi:
-    def start(self, x=' '):
-        return #nix
-    def motorRun(self,x,y):
-        return #nix
+#M1=M2=0
+#
+#class MegaPi:
+#    def start(self, x=' '):
+#        return #nix
+#    def motorRun(self,x,y):
+#        return #nix
 
 
 HOST_NAME = '0.0.0.0'   # 'localhost' # !!!REMEMBER TO CHANGE THIS!!!
