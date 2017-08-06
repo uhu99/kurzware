@@ -5,15 +5,15 @@ import base64
 import numpy as np
 import cv2
 
-from megapi import *
-
-#M1=M2=0
-#
-#class MegaPi:
-#    def start(self, x=' '):
-#        return #nix
-#    def motorRun(self,x,y):
-#        return #nix
+try:
+    from megapi import *
+except ImportError:
+    M1=M2=0
+    class MegaPi:
+        def start(self, x=' '):
+            return #nix
+        def motorRun(self,x,y):
+            return #nix
 
 
 HOST_NAME = '0.0.0.0'   # 'localhost' # !!!REMEMBER TO CHANGE THIS!!!
@@ -39,6 +39,7 @@ class MyView:
     def __init__(self):
         print("--=== 0 ===--")
         self.cap = cv2.VideoCapture(0)
+        self.cap.set(cv2.CAP_PROP_AUTOFOCUS, False)
         self.cap.set(3,self.WIDTH) #width: 640
         self.cap.set(4,self.HEIGHT) #height: 480
         
@@ -104,10 +105,21 @@ class MyView:
     
     
     def takePictures(self, t=SLEEP):
+        def decode_fourcc(v):
+            v = int(v)
+            return "".join([chr((v >> 8 * i) & 0xFF) for i in range(4)])
+
         ret, self.frame[0] = self.cap.read()
+        fourcc = decode_fourcc(self.cap.get(cv2.CAP_PROP_FOURCC))
+        fps = self.cap.get(cv2.CAP_PROP_FPS)
+        print("fourcc {0} fps {1}".format(fourcc,fps))
+        
         for i in range(2, self.FRAMES, 2):
             time.sleep(t)
             ret, self.frame[i] = self.cap.read()
+            fourcc = decode_fourcc(self.cap.get(cv2.CAP_PROP_FOURCC))
+            fps = self.cap.get(cv2.CAP_PROP_FPS)
+            print("fourcc {0} fps {1}".format(fourcc,fps))
 
 
     def encodePictures(self):
