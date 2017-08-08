@@ -23,9 +23,9 @@ SLOW = 20
 FAST = 70
 
 class MyView:
-    WIDTH=160 #640
-    HEIGHT=120 #480
-
+    WIDTH=160
+    HEIGHT=120
+xo
     SHOTS = 5
     FRAMES = SHOTS + SHOTS - 1
 
@@ -38,16 +38,28 @@ class MyView:
     
     def __init__(self):
         print("--=== 0 ===--")
-        self.cap = cv2.VideoCapture(0)
-        self.cap.set(cv2.CAP_PROP_AUTOFOCUS, False)
-        self.cap.set(3,self.WIDTH) #width: 640
-        self.cap.set(4,self.HEIGHT) #height: 480
+        self.camera = cv2.VideoCapture()
         
-        ret, img = self.cap.read()
+        self.cameraOpen(0)
+        ret, img = self.camera.read()
+        print("Return Code: {}".format(ret))
+        self.cameraRelease()
         self.frame = [ np.zeros_like(img) for i in range(0, self.FRAMES) ]
 
         self.hsv = np.zeros_like(img)
         self.hsv[...,1] = 255
+
+        
+    def cameraOpen(self, p):
+        self.camera.open(p)
+        self.camera.set(cv2.CAP_PROP_AUTOFOCUS, False)
+        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH,self.WIDTH)
+        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT,self.HEIGHT)
+        x=1
+        
+    def cameraRelease(self):
+        self.camera.release()
+        x=1
 
 
     def flow2hsv(self, flow):
@@ -104,23 +116,33 @@ class MyView:
         cv2.putText(bgr,t,(10,75), font, fsize, fcolor, fthick,cv2.LINE_AA)
     
     
-    def takePictures(self, t=SLEEP):
+    def oneShot(self,i):
         def decode_fourcc(v):
             v = int(v)
             return "".join([chr((v >> 8 * i) & 0xFF) for i in range(4)])
 
-        ret, self.frame[0] = self.cap.read()
-        fourcc = decode_fourcc(self.cap.get(cv2.CAP_PROP_FOURCC))
-        fps = self.cap.get(cv2.CAP_PROP_FPS)
-        print("fourcc {0} fps {1}".format(fourcc,fps))
+        while True:
+            ret, self.frame[i] = self.camera.read()
+            if ret:
+                print("Return Code: {}".format(ret))
+                break
+            print("Retry Shot ...")
+            
+        fourcc = decode_fourcc(self.camera.get(cv2.CAP_PROP_FOURCC))
+        fps = self.camera.get(cv2.CAP_PROP_FPS)
+        print(("fourcc {0} fps {1}".format(fourcc,fps)))
+
+            
+    def takePictures(self, t=SLEEP):
+        self.cameraOpen(0)
         
+        self.oneShot(0)
         for i in range(2, self.FRAMES, 2):
             time.sleep(t)
-            ret, self.frame[i] = self.cap.read()
-            fourcc = decode_fourcc(self.cap.get(cv2.CAP_PROP_FOURCC))
-            fps = self.cap.get(cv2.CAP_PROP_FPS)
-            print("fourcc {0} fps {1}".format(fourcc,fps))
-
+            self.oneShot(i)
+            
+        self.cameraRelease()
+        
 
     def encodePictures(self):
         ef = [b' ' for i in range(0,self.FRAMES)]
@@ -275,6 +297,3 @@ if __name__ == '__main__':
     print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER)
     bot.motorRun(M1,0);
     bot.motorRun(M2,0);
-    
-    view.cap.release()
-    
