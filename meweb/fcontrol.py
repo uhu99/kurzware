@@ -25,7 +25,7 @@ FAST = 70
 class MyView:
     WIDTH=160
     HEIGHT=120
-xo
+
     SHOTS = 5
     FRAMES = SHOTS + SHOTS - 1
 
