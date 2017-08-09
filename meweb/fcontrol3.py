@@ -132,8 +132,7 @@ class MyView:
     def takePictures(self, t=SLEEP):
         self.cameraOpen(0)
         
-        self.oneShot(0)
-        for i in range(2, self.FRAMES, 2):
+        for i in range(0, self.FRAMES, 2):
             time.sleep(t)
             self.oneShot(i)
             
@@ -230,7 +229,7 @@ if __name__ == '__main__':
         print("G H J")
         print("V B N")
         
-        k = ord(raw_input("Press Key: "))
+        k = ord(input("Press Key: "))
         if k == 27:
             break
         elif k == ord('g'):
